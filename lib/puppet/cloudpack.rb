@@ -100,6 +100,7 @@ module Puppet::CloudPack
       add_region_option(action)
       add_availability_zone_option(action)
       add_tags_option(action)
+      add_userdata_option(action)
       add_image_option(action)
       add_type_option(action)
       add_keyname_option(action)
@@ -138,6 +139,22 @@ module Puppet::CloudPack
           end
         end
 
+      end
+    end
+
+    def add_userdata_option(action)
+      action.option '--user-data=', '-u=' do
+        summary 'AWS EC2 User Data.'
+        description <<-EOT
+          Specifies the userdata string to pass to the VM.
+        EOT
+      end
+
+      action.option '--user-data-file=', '--uf=' do
+        summary 'AWS EC2 User Data file.'
+        description <<-EOT
+          Specifies the file to read userdata entries from to pass to the VM.
+        EOT
       end
     end
 
@@ -623,6 +640,10 @@ module Puppet::CloudPack
         options[:_destroy_server_at_exit] = :create
       end
 
+      if options.has_key? :user_data_file
+          options[:user_data] = File.read(options[:user_data_file])
+      end
+
       Puppet.info("Connecting to #{options[:platform]} #{options[:region]} ...")
       connection = create_connection(options)
       Puppet.info("Connecting to #{options[:platform]} #{options[:region]} ... Done")
@@ -636,7 +657,8 @@ module Puppet::CloudPack
         :groups     => options[:security_group],
         :flavor_id  => options[:type],
         :subnet_id     => options[:subnet],
-        :availability_zone => options[:availability_zone]
+        :availability_zone => options[:availability_zone],
+        :user_data => options[:user_data]
       )
 
       # This is the earliest point we have knowledge of the instance ID
