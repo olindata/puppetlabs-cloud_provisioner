@@ -7,6 +7,7 @@ require 'puppet/network/http_pool'
 require 'puppet/cloudpack/progressbar'
 require 'puppet/cloudpack/utils'
 require 'timeout'
+require 'socket'
 
 module Puppet::CloudPack
   class InstanceErrorState < Exception
@@ -798,6 +799,8 @@ module Puppet::CloudPack
       cert_options = {:ca_location => :remote}
 
       # TODO: Wait for C.S.R.?
+      Puppet.notice "Sleeping for 20 ..."
+      sleep 20
 
       Puppet.notice "Signing certificate ..."
       begin

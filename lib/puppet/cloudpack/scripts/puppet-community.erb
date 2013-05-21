@@ -133,6 +133,12 @@ function provision_puppet() {
     exit 1
   fi
 
+  <%
+    host = Socket.gethostname
+    ip = IPSocket.getaddress(host)
+  %>
+  echo "<%= ip %> <%= host %>" >> /etc/hosts
+
   install_puppet
   configure_puppet
   <%= 'facts_dot_d' if options[:facts] %>
