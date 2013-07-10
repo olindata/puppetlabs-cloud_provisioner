@@ -155,4 +155,10 @@ function provision_puppet() {
   exit 0
 }
 
-provision_puppet
+# check if puppet is already installed
+command -v puppet > /dev/null && echo "Puppet installation found, skipping provisioning ..."
+
+# puppet is not installed, handle provisioning
+if [ $? -eq 1 ];
+then provision_puppet
+fi
