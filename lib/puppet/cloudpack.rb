@@ -799,8 +799,8 @@ module Puppet::CloudPack
       cert_options = {:ca_location => :remote}
 
       # TODO: Wait for C.S.R.?
-      Puppet.notice "Sleeping for 20 ..."
-      sleep 20
+      Puppet.notice "Sleeping for 45 ..."
+      sleep 45
 
       Puppet.notice "Signing certificate ..."
       begin
